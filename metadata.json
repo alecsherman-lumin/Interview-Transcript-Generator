@@ -1,5 +1,5 @@
 {
-  "name": "Audio Transcript Processor",
+  "name": ".mp3 Audio Transcript Processor",
   "description": "An application that processes an MP3 audio file using the Gemini API to generate a clean, verbatim transcript split by speaker.",
   "requestFramePermissions": []
 }

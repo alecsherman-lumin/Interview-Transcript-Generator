@@ -16,10 +16,11 @@ const processAudioTranscript = async (audioData: {mimeType: string, data: string
   };
 
   const textPart = {
-    text: `You are an expert transcription service. Your task is to take this audio file and convert it into a structured, speaker-diarized format.
+    text: `You are an expert transcription service. Your task is to take this audio file and convert it into a structured, speaker-diarized format with timestamps.
 
 - Transcribe the audio verbatim.
 - Identify each distinct speaker.
+- For each speaker's turn, provide a start timestamp in HH:MM:SS format.
 - Group consecutive lines from the same speaker into a single turn.
 - The output must be a clean, verbatim transcript.
 - Ensure the output is a valid JSON array matching the provided schema.`,
@@ -47,9 +48,13 @@ const processAudioTranscript = async (audioData: {mimeType: string, data: string
                   description: "A single line of verbatim text spoken by the speaker."
                 },
                 description: "An array of verbatim text lines spoken by this speaker in this turn."
+              },
+              timestamp: {
+                type: Type.STRING,
+                description: "The start timestamp of the speaker's turn in HH:MM:SS format."
               }
             },
-            required: ["speaker", "lines"]
+            required: ["speaker", "lines", "timestamp"]
           }
         }
       }

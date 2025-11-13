@@ -1,5 +1,5 @@
 {
-  "name": "audio-transcript-processor",
+  "name": ".mp3-audio-transcript-processor",
   "private": true,
   "version": "0.0.0",
   "type": "module",

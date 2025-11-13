@@ -36,10 +36,11 @@ const AudioInput: React.FC<{
 
   const handleFileChange = (files: FileList | null) => {
     if (files && files.length > 0) {
-      if (files[0].type === 'audio/mpeg') {
+      const acceptedTypes = ['audio/mpeg', 'audio/mp4', 'audio/x-m4a'];
+      if (acceptedTypes.includes(files[0].type)) {
         setAudioFile(files[0]);
       } else {
-        alert('Please select an MP3 file.');
+        alert('Please select an MP3 or M4A file.');
       }
     }
   };
@@ -91,7 +92,7 @@ const AudioInput: React.FC<{
             type="file" 
             ref={fileInputRef}
             className="hidden"
-            accept="audio/mpeg"
+            accept="audio/mpeg,audio/mp4,audio/x-m4a"
             onChange={(e) => handleFileChange(e.target.files)}
         />
 
@@ -115,7 +116,7 @@ const AudioInput: React.FC<{
                   <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                 </svg>
                 <p className="mt-2">Click to upload or drag and drop</p>
-                <p className="text-sm">MP3 file (Max 15 mins recommended)</p>
+                <p className="text-sm">MP3 or M4A file (Max 15 mins recommended)</p>
             </div>
         )}
       </div>
@@ -155,7 +156,7 @@ const TranscriptOutput: React.FC<{
         {processedTranscript && !isLoading && (
             <button
                 onClick={() => {
-                    const text = processedTranscript.map(turn => `${turn.speaker}:\n${turn.lines.join('\n')}`).join('\n\n');
+                    const text = processedTranscript.map(turn => `[${turn.timestamp}] ${turn.speaker}:\n${turn.lines.join('\n')}`).join('\n\n');
                     navigator.clipboard.writeText(text);
                 }}
                 className="px-3 py-1.5 text-sm bg-gray-700 text-gray-200 rounded-md hover:bg-gray-600 transition-colors flex items-center space-x-2"
@@ -174,7 +175,10 @@ const TranscriptOutput: React.FC<{
         <div className="space-y-6">
           {processedTranscript.map((turn, index) => (
             <div key={index} className="flex flex-col">
-              <span className="font-bold text-indigo-400 mb-1">{turn.speaker}</span>
+              <div className="flex items-center space-x-2 mb-1">
+                <span className="font-bold text-indigo-400">{turn.speaker}</span>
+                <span className="text-xs text-gray-400 bg-gray-800 px-2 py-0.5 rounded-full font-mono">{turn.timestamp}</span>
+              </div>
               <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">{turn.lines.join('\n').replace(/^\s+/,'')}</p>
             </div>
           ))}
@@ -182,7 +186,7 @@ const TranscriptOutput: React.FC<{
       )}
       {!isLoading && !error && !processedTranscript && (
         <div className="flex items-center justify-center h-full text-gray-500">
-          Upload an MP3 file and click "Process" to see the transcript here.
+          Upload an MP3 or M4A file and click "Process" to see the transcript here.
         </div>
       )}
     </div>
